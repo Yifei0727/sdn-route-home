@@ -1,0 +1,4 @@
+[ZeroTier]
+title=Zerotier Edge
+description=zerotier node
+ports=9993/tcp|9993/udp

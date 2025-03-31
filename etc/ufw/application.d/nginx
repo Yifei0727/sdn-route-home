@@ -1,0 +1,4 @@
+[Nginx]
+title=Nginx
+description=Web server
+ports=80/tcp|443/tcp|443/udp

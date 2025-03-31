@@ -1,0 +1,4 @@
+[KCPTUN]
+title=kcp over udp
+description=kcp tun server
+ports=5940/udp

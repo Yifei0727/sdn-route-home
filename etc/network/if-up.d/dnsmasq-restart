@@ -1,0 +1,10 @@
+#!/bin/sh
+
+IFACE="$1"
+STATUS="$2"
+logger -t networking "iface event fired $1 $2"
+if [[ "$IFACE" == zt* ]] && [ "$STATUS" = "up" ]; then
+  while ! ip -4 addr show dev "$IFACE" |grep -q "inet "; do sleep 1; done;
+  systemctl stop dnsmasq
+  systemctl start dnsmasq
+fi
