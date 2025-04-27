@@ -1,0 +1,4 @@
+[DynamicUdpPorts]
+title=DynamicUdpPorts
+description=Dynamic UDP Ports
+ports=20000:65535/udp
