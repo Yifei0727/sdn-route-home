@@ -1,6 +1,10 @@
 # Use a smaller base image
 FROM alpine:3.18
 
+LABEL org.opencontainers.image.source=https://github.com/Yifei0727/sdn-route-home
+LABEL org.opencontainers.image.description="A KCP Tunnel for Shadowsocks server Docker image"
+LABEL org.opencontainers.image.licenses=MIT
+
 # Install necessary packages, including supervisor
 RUN apk add --no-cache supervisor bash
 
