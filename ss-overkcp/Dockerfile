@@ -34,8 +34,7 @@ RUN \
 
 # Copy supervisord configuration file
 COPY supervisor/supervisord.conf /etc/supervisor/supervisord.conf
-COPY etc/supervisor/conf.d/* /etc/supervisor/conf.d/
-COPY daemon/* /daemon/
+COPY supervisor/conf.d/*         /etc/supervisor/conf.d/
 ARG BUILD_PORT=5940
 ENV KCP_SERVER_PORT=${BUILD_PORT}
 # Expose necessary ports
