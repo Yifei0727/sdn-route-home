@@ -36,8 +36,7 @@ RUN \
     mv /tmp/build/${SS_BINARY} /daemon/sss-server && \
     rm kcptun.tar.gz shadowsocks.tar.xz && \
     rm -rf /tmp/build  && \
-    chmod +x /daemon/${SS_BINARY} && \
-    chmod +x /daemon/${KCP_BINARY}
+    chmod +x /daemon/*
 
 # Copy supervisord configuration file
 COPY supervisor/supervisord.conf /etc/supervisor/supervisord.conf
