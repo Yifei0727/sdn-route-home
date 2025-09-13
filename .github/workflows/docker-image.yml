@@ -25,7 +25,7 @@ jobs:
           cd ss-overkcp/server
           docker build . --file Dockerfile --tag $IMAGE_ID:$TAG --tag $IMAGE_ID:latest
           cd ../client
-          docker build . --file Dockerfile --tag ${IMAGE_ID}_client:$TAG --tag ${IMAGE_ID}_client:latest
+          docker build . --file Dockerfile --tag ${IMAGE_ID}_client:$TAG --tag ${IMAGE_ID}-client:latest
       - name: Push the Docker image
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/ss-overkcp
@@ -33,5 +33,5 @@ jobs:
           TAG=${{ github.sha }}
           docker push $IMAGE_ID:$TAG
           docker push $IMAGE_ID:latest
-          docker push ${IMAGE_ID}_client:$TAG
-          docker push ${IMAGE_ID}_client:latest
+          docker push ${IMAGE_ID}-client:$TAG
+          docker push ${IMAGE_ID}-client:latest
