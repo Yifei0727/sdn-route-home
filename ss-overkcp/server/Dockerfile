@@ -11,6 +11,7 @@ RUN apk add --no-cache supervisor bash
 # Create supervisord configuration directory
 RUN mkdir -p /daemon/
 RUN mkdir -p /etc/supervisor/conf.d
+RUN mkdir -p /var/log/supervisor/
 
 # Download and install KCP server and shadowsocks binaries
 RUN \
@@ -28,13 +29,15 @@ RUN \
     else \
         echo "Unsupported architecture: ${ARCH}" && exit 1; \
     fi && \
-    tar -xzf kcptun.tar.gz -C /daemon/ && \
-    tar -xf shadowsocks.tar.xz -C /daemon/ && \
+    mkdir /tmp/build/ && \
+    tar -xzf kcptun.tar.gz -C /tmp/build/ && \
+    tar -xf shadowsocks.tar.xz -C /tmp/build/ && \
+    mv /tmp/build/${KCP_BINARY} /daemon/kcp-server && \
+    mv /tmp/build/${SS_BINARY} /daemon/sss-server && \
     rm kcptun.tar.gz shadowsocks.tar.xz && \
-    chmod +x /daemon/${KCP_BINARY} && \
-    mv /daemon/${KCP_BINARY} /daemon/kcp-server && \
+    rm -rf /tmp/build  && \
     chmod +x /daemon/${SS_BINARY} && \
-    mv /daemon/${SS_BINARY} /daemon/sss-server
+    chmod +x /daemon/${KCP_BINARY} && \
 
 # Copy supervisord configuration file
 COPY supervisor/supervisord.conf /etc/supervisor/supervisord.conf
