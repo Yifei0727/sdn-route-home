@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-export GITHUB_USER_REPO="yifei0727"
+: "${GITHUB_USER_REPO:=yifei0727}"
+export GITHUB_USER_REPO
 
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove --purge -y && sudo apt autoclean -y
 sudo apt install -y libpam-google-authenticator ufw supervisor dnsmasq zerotier-one docker.io jq curl
@@ -31,7 +32,9 @@ function setup_2fa() {
 }
 
 function update_hostname() {
-  hostnamectl set-hostname "$(ip link | grep zt | awk -F ':' '{print $2}' | xargs -n1 ifconfig | grep 'inet ' | awk '{print $2}' | awk -F. '{printf "%02d-%02d-%02d-%02d", $1, $2, $3, $4}')"
+  HOSTNAME="$(ip link | grep zt | awk -F ':' '{print $2}' | xargs -n1 ifconfig | grep 'inet ' | awk '{print $2}' | awk -F. '{printf "%02d-%02d-%02d-%02d", $1, $2, $3, $4}')"
+  hostnamectl set-hostname $HOSTNAME
+  echo "\n127.0.0.1 $HOSTNAME" >> /etc/hosts
 }
 
 install_ssh_keys
