@@ -32,8 +32,8 @@ RUN \
     mkdir /tmp/build && \
     tar -xzf kcptun.tar.gz -C /tmp/build && \
     tar -xf shadowsocks.tar.xz -C /tmp/build && \
-    mv /tmp/build${KCP_BINARY} /daemon/kcp-client && \
-    mv /tmp/build${SS_BINARY} /daemon/sss-local && \
+    mv /tmp/build/${KCP_BINARY} /daemon/kcp-client && \
+    mv /tmp/build/${SS_BINARY} /daemon/sss-local && \
     rm kcptun.tar.gz shadowsocks.tar.xz && \
     rm -rf /tmp/build  && \
     chmod +x /daemon/*
