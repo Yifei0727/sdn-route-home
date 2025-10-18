@@ -26,6 +26,8 @@ jobs:
           docker build . --file Dockerfile --tag $IMAGE_ID:$TAG --tag $IMAGE_ID:latest
           cd ../client
           docker build . --file Dockerfile --tag ${IMAGE_ID}-client:$TAG --tag ${IMAGE_ID}-client:latest
+          cd ../../dns-server
+          docker build . --file Dockerfile --tag ${IMAGE_ID}-ubuntu-dnsmasq:$TAG --tag ${IMAGE_ID}-ubuntu-dnsmasq:latest
       - name: Push the Docker image
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/ss-overkcp
@@ -35,3 +37,5 @@ jobs:
           docker push $IMAGE_ID:latest
           docker push ${IMAGE_ID}-client:$TAG
           docker push ${IMAGE_ID}-client:latest
+          docker push ${IMAGE_ID}-ubuntu-dnsmasq:$TAG
+          docker push ${IMAGE_ID}-ubuntu-dnsmasq:latest
