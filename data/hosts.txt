@@ -1,0 +1,26 @@
+# google translate api server
+translate.googleapis.com
+# google calendar api server
+api.googleusercontent.com
+
+# jetbrains AI services
+api.jetbrains.ai
+
+# github copilot services
+copilot-proxy.githubusercontent.com
+copilot-telemetry.githubusercontent.com
+origin-tracker.githubusercontent.com
+githubcopilot.com
+api.githubcopilot.com
+
+# github copilot services (old)
+github.githubassets.com
+githubusercontent.com
+github.com
+# github copilot services (new)
+github-copilot.githubassets.com
+github-copilot.githubusercontent.com
+github-copilot.com
+# github copilot services (new, old)
+github-copilot-proxy.githubusercontent.com
+github-copilot-telemetry.githubusercontent.com

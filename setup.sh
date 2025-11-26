@@ -4,7 +4,7 @@
 export GITHUB_USER_REPO
 
 sudo apt update && sudo apt upgrade -y && sudo apt autoremove --purge -y && sudo apt autoclean -y
-sudo apt install -y libpam-google-authenticator ufw supervisor dnsmasq zerotier-one docker.io jq curl
+sudo apt install -y libpam-google-authenticator ufw zerotier-one jq curl docker.io docker-compose-v2
 
 function install_ssh_keys() {
   mkdir -p   ~/.ssh/
@@ -39,28 +39,28 @@ function update_hostname() {
 
 install_ssh_keys
 install_zerotier
-setup_2fa
+
+# wait for user confirmation that ZeroTier interface has an IP address
+while true; do
+  read -r -p "Confirm ZeroTier interface has an IP assigned? (y/yes to continue or exit abort): " ans
+  case "${ans,,}" in
+    y|yes) break ;;
+    exit) echo "Aborting. Assign IP and re-run."; exit 1 ;;
+    *) echo "Please enter y/yes to continue or n/no to abort." ;;
+  esac
+done
+
 update_hostname
+setup_2fa
 
 # 将ssh 服务默认 22 修改为 22505
 sed -i '/^\s*Port\s\+22\s*$/s/^\s*#*/#/' /etc/ssh/sshd_config
 sed -i '/^\s*#\s*Port\s\+22\s*$/a Port 22505' /etc/ssh/sshd_config
-cp -ar etc /
 # 获取本地出口网卡
 out_net_interface=$(ip route | grep "default via" | awk '{print $5}')
 # 替换 before.rules 中的 eth0 为实际网卡名
 sed -i "s/-o eth0/-o $out_net_interface/g" /etc/ufw/before.rules
 #
 systemctl restart ssh.service
-systemctl enable dnsmasq.service
-systemctl start dnsmasq.service
 systemctl enable ufw.service
 systemctl start ufw.service
-
-docker login ghcr.io
-docker pull ghcr.io/${GITHUB_USER_REPO}/ss-overkcp
-docker run --name kcptun_ss \
-  -e SSS_PASSWORD=u18681@weixin \
-  -p 5940:5940/udp  \
-  -d \
-  ghcr.io/${GITHUB_USER_REPO}/ss-overkcp

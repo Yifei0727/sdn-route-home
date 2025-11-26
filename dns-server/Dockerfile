@@ -5,6 +5,7 @@ LABEL org.opencontainers.image.description="A Dnsmasq Server Docker image based 
 LABEL org.opencontainers.image.licenses=MIT
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV LISTEN_ADDRESS="0.0.0.0"
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends dnsmasq ca-certificates && \
@@ -15,4 +16,4 @@ RUN apt-get update && \
 EXPOSE 53/udp 53/tcp
 
 # Start dnsmasq
-CMD ["dnsmasq", "-k"]
+CMD ["dnsmasq", "-k", "--listen-address=${LISTEN_ADDRESS}"]
