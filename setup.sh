@@ -37,6 +37,13 @@ function update_hostname() {
   echo "\n127.0.0.1 $HOSTNAME" >> /etc/hosts
 }
 
+function prepare_env() {
+  cat >/etc/profile.d/node-env.sh <<EOF
+export ZT_HOST=$(ip link|grep zt|awk -F ':' '{print $2}'|xargs ifconfig |grep 'inet 10.'|awk '{print $2}')
+EOF
+ chmod +x /etc/profile.d/node-env.sh
+}
+
 install_ssh_keys
 install_zerotier
 
@@ -50,6 +57,7 @@ while true; do
   esac
 done
 
+prepare_env
 update_hostname
 setup_2fa
 
