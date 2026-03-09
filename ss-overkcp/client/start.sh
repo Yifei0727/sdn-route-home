@@ -53,7 +53,7 @@ JSON
 
 # Create Horust service file for sss-local (starts after all kcp-clients are running)
 cat > "$SERVICES_DIR/sss-local.toml" << TOML
-command = "/daemon/sss-local -c /tmp/sss-local.json -U -vvv --tcp-no-delay --remote-dns-server"
+command = "/daemon/sss-local -c /tmp/sss-local.json -U -vvv --tcp-no-delay"
 start-after = [${DEPS}]
 
 [restart]
