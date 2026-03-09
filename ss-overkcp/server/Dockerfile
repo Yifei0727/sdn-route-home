@@ -19,12 +19,12 @@ RUN \
     if [ "${ARCH}" = "x86_64" ] ; then \
         KCP_BINARY="server_linux_amd64"; \
         SS_BINARY="ssserver"; \
-        wget -q -O kcptun.tar.gz https://github.com/xtaci/kcptun/releases/download/v20250427/kcptun-linux-amd64-20250427.tar.gz ; \
+        wget -q -O kcptun.tar.gz https://github.com/Yifei0727/kcptun/releases/download/v20260129/kcptun_linux_amd64.tar.gz ; \
         wget -q -O shadowsocks.tar.xz https://github.com/shadowsocks/shadowsocks-rust/releases/download/v1.23.4/shadowsocks-v1.23.4.x86_64-unknown-linux-musl.tar.xz ; \
     elif [ "${ARCH}" = "arm64" ] || [ "${ARCH}" = "aarch64" ] ; then \
         KCP_BINARY="server_linux_arm64"; \
         SS_BINARY="ssserver"; \
-        wget -q -O kcptun.tar.gz https://github.com/xtaci/kcptun/releases/download/v20250427/kcptun-linux-arm64-20250427.tar.gz ; \
+        wget -q -O kcptun.tar.gz https://github.com/Yifei0727/kcptun/releases/download/v20260129/kcptun_linux_arm64.tar.gz ; \
         wget -q -O shadowsocks.tar.xz https://github.com/shadowsocks/shadowsocks-rust/releases/download/v1.23.4/shadowsocks-v1.23.4.aarch64-unknown-linux-musl.tar.xz ; \
     else \
         echo "Unsupported architecture: ${ARCH}" && exit 1; \
