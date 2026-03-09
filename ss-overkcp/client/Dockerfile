@@ -5,15 +5,13 @@ LABEL org.opencontainers.image.source=https://github.com/Yifei0727/sdn-route-hom
 LABEL org.opencontainers.image.description="A KCP Tunnel for Shadowsocks server Docker image"
 LABEL org.opencontainers.image.licenses=MIT
 
-# Install necessary packages, including supervisor
-RUN apk add --no-cache supervisor bash
+# Install necessary packages
+RUN apk add --no-cache bash
 
-# Create supervisord configuration directory
+# Create daemon directory
 RUN mkdir -p /daemon/
-RUN mkdir -p /etc/supervisor/conf.d
-RUN mkdir -p /var/log/supervisor/
 
-# Download and install KCP server and shadowsocks binaries
+# Download and install KCP client, shadowsocks, and Horust binaries
 RUN \
     ARCH=$(arch) ; \
     if [ "${ARCH}" = "x86_64" ] ; then \
@@ -21,31 +19,38 @@ RUN \
         SS_BINARY="sslocal"; \
         wget -q -O kcptun.tar.gz https://github.com/xtaci/kcptun/releases/download/v20250427/kcptun-linux-amd64-20250427.tar.gz ; \
         wget -q -O shadowsocks.tar.xz https://github.com/shadowsocks/shadowsocks-rust/releases/download/v1.23.4/shadowsocks-v1.23.4.x86_64-unknown-linux-musl.tar.xz ; \
+        wget -q -O horust.tar.gz https://github.com/FedericoPonzi/Horust/releases/download/v0.1.13/horust-x86_64-unknown-linux-musl.tar.gz ; \
     elif [ "${ARCH}" = "arm64" ] || [ "${ARCH}" = "aarch64" ] ; then \
-        KCP_BINARY="client_linux_amd64"; \
+        KCP_BINARY="client_linux_arm64"; \
         SS_BINARY="sslocal"; \
         wget -q -O kcptun.tar.gz https://github.com/xtaci/kcptun/releases/download/v20250427/kcptun-linux-arm64-20250427.tar.gz ; \
         wget -q -O shadowsocks.tar.xz https://github.com/shadowsocks/shadowsocks-rust/releases/download/v1.23.4/shadowsocks-v1.23.4.aarch64-unknown-linux-musl.tar.xz ; \
+        wget -q -O horust.tar.gz https://github.com/FedericoPonzi/Horust/releases/download/v0.1.13/horust-aarch64-unknown-linux-gnu.tar.gz ; \
+        apk add --no-cache gcompat ; \
     else \
         echo "Unsupported architecture: ${ARCH}" && exit 1; \
     fi && \
     mkdir /tmp/build && \
     tar -xzf kcptun.tar.gz -C /tmp/build && \
     tar -xf shadowsocks.tar.xz -C /tmp/build && \
+    mkdir /tmp/horust-build && \
+    tar -xzf horust.tar.gz -C /tmp/horust-build && \
     mv /tmp/build/${KCP_BINARY} /daemon/kcp-client && \
     mv /tmp/build/${SS_BINARY} /daemon/sss-local && \
-    rm kcptun.tar.gz shadowsocks.tar.xz && \
-    rm -rf /tmp/build  && \
-    chmod +x /daemon/*
+    mv /tmp/horust-build/horust /usr/bin/horust && \
+    rm kcptun.tar.gz shadowsocks.tar.xz horust.tar.gz && \
+    rm -rf /tmp/build /tmp/horust-build && \
+    chmod +x /daemon/* /usr/bin/horust
 
-# Copy supervisord configuration file
-COPY supervisor/supervisord.conf /etc/supervisor/supervisord.conf
-COPY supervisor/conf.d/*         /etc/supervisor/conf.d/
+# Copy startup script
+COPY start.sh /daemon/start.sh
+RUN chmod +x /daemon/start.sh
+
 ARG BUILD_PORT=1080
 ENV LOCAL_PORT=${BUILD_PORT}
 # Expose necessary ports
 EXPOSE ${BUILD_PORT}/tcp
 EXPOSE ${BUILD_PORT}/udp
 
-# Set supervisord as the entry point
-CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+# Use start.sh as the entry point to dynamically configure Horust services
+CMD ["/daemon/start.sh"]
