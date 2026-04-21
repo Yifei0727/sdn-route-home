@@ -35,7 +35,7 @@ RUN \
     tar -xf shadowsocks.tar.xz -C /tmp/build && \
     mkdir /tmp/horust-build && \
     tar -xzf horust.tar.gz -C /tmp/horust-build && \
-    mv /tmp/build/${KCP_BINARY} /daemon/kcp-client && \
+    mv /tmp/build/${KCP_BINARY} /daemon/kcp-local && \
     mv /tmp/build/${SS_BINARY} /daemon/sss-local && \
     mv /tmp/horust-build/horust /usr/bin/horust && \
     rm kcptun.tar.gz shadowsocks.tar.xz horust.tar.gz && \

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Startup script for the ss-overkcp client.
 # Dynamically generates Horust service files based on SSS_SERVER (comma-separated list).
-# Each server entry gets its own kcp-client process; sss-local connects to all of them.
+# Each server entry gets its own kcp-local process; sss-local connects to all of them.
 set -euo pipefail
 
 SERVICES_DIR=/etc/horust/services
@@ -17,11 +17,11 @@ DEPS=""
 for i in "${!SERVERS[@]}"; do
     SERVER=$(echo "${SERVERS[$i]}" | tr -d '[:space:]')
     KCP_PORT=$((KCP_PORT_BASE + i))
-    SVC_NAME="kcp-client-${i}"
+    SVC_NAME="kcp-local-${i}"
 
-    # Create Horust service file for this kcp-client instance
+    # Create Horust service file for this kcp-local instance
     cat > "$SERVICES_DIR/${SVC_NAME}.toml" << TOML
-command = "/daemon/kcp-client -r ${SERVER} -l :${KCP_PORT}"
+command = "/daemon/kcp-local -r ${SERVER} -l 127.0.0.1:${KCP_PORT}"
 
 [restart]
 strategy = "always"
@@ -41,7 +41,7 @@ TOML
     DEPS="${DEPS}\"${SVC_NAME}.toml\""
 done
 
-# Write shadowsocks local config referencing all kcp-client local ports
+# Write shadowsocks local config referencing all kcp-local local ports
 cat > /tmp/sss-local.json << JSON
 {
     "local_address": "0.0.0.0",
@@ -52,7 +52,7 @@ cat > /tmp/sss-local.json << JSON
 }
 JSON
 
-# Create Horust service file for sss-local (starts after all kcp-clients are running)
+# Create Horust service file for sss-local (starts after all kcp-locals are running)
 cat > "$SERVICES_DIR/sss-local.toml" << TOML
 command = "/daemon/sss-local -c /tmp/sss-local.json -vvv --tcp-no-delay"
 start-after = [${DEPS}]
