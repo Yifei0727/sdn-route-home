@@ -46,6 +46,7 @@ cat > /tmp/sss-local.json << JSON
 {
     "local_address": "0.0.0.0",
     "local_port": ${LOCAL_PORT},
+    "mode": "tcp_and_udp",
     "servers": [${SERVER_JSON_ENTRIES}
     ]
 }
@@ -53,7 +54,7 @@ JSON
 
 # Create Horust service file for sss-local (starts after all kcp-clients are running)
 cat > "$SERVICES_DIR/sss-local.toml" << TOML
-command = "/daemon/sss-local -c /tmp/sss-local.json -U -vvv --tcp-no-delay"
+command = "/daemon/sss-local -c /tmp/sss-local.json -vvv --tcp-no-delay"
 start-after = [${DEPS}]
 
 [restart]
