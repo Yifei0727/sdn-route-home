@@ -5,6 +5,7 @@ api.googleusercontent.com
 
 # jetbrains AI services
 api.jetbrains.ai
+junie.jetbrains.com
 
 # github copilot services
 copilot-proxy.githubusercontent.com
@@ -24,3 +25,6 @@ github-copilot.com
 # github copilot services (new, old)
 github-copilot-proxy.githubusercontent.com
 github-copilot-telemetry.githubusercontent.com
+
+# ghcr.io
+ghcr.io
