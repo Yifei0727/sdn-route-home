@@ -6,6 +6,7 @@ api.googleusercontent.com
 # jetbrains AI services
 api.jetbrains.ai
 junie.jetbrains.com
+ingrazzio-cloud-prod.labs.jb.gg
 
 # github copilot services
 copilot-proxy.githubusercontent.com
